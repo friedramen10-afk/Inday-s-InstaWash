@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - IndaySystem</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="box auth-box">
+    <h1>Login</h1>
+
+    <label>Email</label>
+    <input type="email" id="loginEmail" placeholder="Enter your email" />
+
+    <label>Password</label>
+    <input type="password" id="loginPass" placeholder="Enter password" />
+
+    <button class="btn" onclick="loginUser()">Submit</button>
+
+    <p class="auth-link">
+      No account? <a href="register.html">Create one</a>
+    </p>
+
+    <p class="auth-link">
+      Forgot password? <a href="reset.html">Reset here</a>
+    </p>
+  </div>
+
+  <script>
+    function loginUser() {
+      const email = document.getElementById("loginEmail").value.trim();
+      const pass = document.getElementById("loginPass").value.trim();
+
+      if (!email || !pass) {
+        alert("Please fill all fields.");
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+      let found = users.find(
+        u => u.email.toLowerCase() === email.toLowerCase() && u.password === pass
+      );
+
+      if (!found) {
+        alert("Invalid email or password.");
+        return;
+      }
+
+      localStorage.setItem("currentUser", JSON.stringify(found));
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>

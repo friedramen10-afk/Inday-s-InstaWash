@@ -1,0 +1,212 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Inday’s InstaWash</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+      (function(){ emailjs.init("b4hZ3MpCQERRwLtMU"); })();
+    </script>
+    <style media="print">
+      body * { visibility: hidden; }
+      #printReceipt, #printReceipt * { visibility: visible; }
+      #printReceipt {
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="brand">
+        <img src="Image/logo.jpg" class="logo" alt="Inday’s InstaWash">
+        <div class="brand-text">
+          <h1>Inday’s InstaWash</h1>
+          <p class="subtitle" id="pageTitle">HOME</p>
+        </div>
+      </div>
+      <div class="user-area">
+        <span id="currentUserLabel"></span>
+        <button class="btn-logout" id="btnLogout">Logout</button>
+      </div>
+    </div>
+ 
+  <div id="homePage" class="page active">
+    <div class="grid-home">
+
+      <div class="home-card nav-card" data-target="calculationPage">
+        <div class="icon">🧮</div>
+        <h3>New Order</h3>
+      </div>
+
+      <div class="home-card nav-card" data-target="transactionsPage">
+        <div class="icon">📋</div>
+        <h3>Records</h3>
+      </div>
+
+      <div class="home-card nav-card owner-only" data-target="dashboardPage">
+        <div class="icon">📊</div>
+        <h3>Dashboard</h3>
+      </div>
+
+      <div class="home-card nav-card owner-only" data-target="activityPanel">
+        <div class="icon">🕒</div>
+        <h3>Activity Logs</h3>
+      </div>
+
+    </div>
+  </div> 
+   
+    <div id="calculationPage" class="page">
+      <div class="box">
+
+        <div class="nav">
+          <button class="nav-btn" data-target="homePage">Home</button>
+          <button class="nav-btn" data-target="calculationPage">New Order</button>
+          <button class="nav-btn" data-target="transactionsPage">Records</button>
+          <button class="nav-btn owner-only" data-target="dashboardPage">OverView</button>
+          <button class="nav-btn owner-only" data-target="activityPanel">Activity Log</button>
+        </div>
+
+ 
+
+        <label>Customer Name</label>
+        <input type="text" id="customerName" required>
+
+        <label>Customer Email</label>
+        <input type="email" id="customerEmail" required>
+
+        <label>Type of Laundry</label>
+        <select id="laundryType" onchange="updateInfo()">
+          <option value="Clothes">Clothes - Max 7kg (₱170/load)</option>
+          <option value="Sheets">Sheets - Max 6kg (₱170/load)</option>
+          <option value="Comforter">Comforter - 1pc (₱150/load)</option>
+        </select>
+
+        <label>Weight (kg or pcs)</label>
+        <input type="number" id="weight" step="0.1" min="0.1">
+
+        <small id="info">Max weight: 7kg per load</small>
+
+        <div id="customerInfo" class="info-box"></div>
+
+        <button class="btn" id="btnAddTransaction">Add Transaction</button>
+
+      </div>
+    </div>
+   
+    <div id="transactionsPage" class="page">
+      <div class="box">
+
+        <div class="nav">
+          <button class="nav-btn" data-target="homePage">Home</button>
+          <button class="nav-btn" data-target="calculationPage">New Order</button>
+          <button class="nav-btn" data-target="transactionsPage">Records</button>
+          <button class="nav-btn owner-only" data-target="dashboardPage">OverView</button>
+          <button class="nav-btn owner-only" data-target="activityPanel">Activity Log</button>
+        </div>
+
+       <div class="box data-tools">
+  <div class="data-tools-wrap">
+    <h2>Data Tools</h2>
+
+    <div class="tool-row">
+      <button id="btnExport" class="tool-btn">Save As</button>
+      <label for="importFile" class="tool-btn import-btn">Import Data</label> <input type="file" id="importFile" accept=".json" hidden>
+      <button id="btnReset" class="tool-btn red owner-only">Reset</button>
+    </div>
+  </div>
+</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Type</th>
+              <th>Weight</th>
+              <th>Price</th>
+              <th>Loads</th>
+              <th>Remarks</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="dashboardPage" class="page owner-only">
+      <div class="box">
+      <div class="nav">
+          <button class="nav-btn" data-target="homePage">Home</button>
+          <button class="nav-btn" data-target="calculationPage">New Order</button>
+          <button class="nav-btn" data-target="transactionsPage">Records</button>
+          <button class="nav-btn owner-only" data-target="dashboardPage">OverView</button>
+          <button class="nav-btn owner-only" data-target="activityPanel">Activity Log</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><h3>Total Revenue</h3><p id="totalrevenue">₱0</p></div>
+          <div class="stat"><h3>Transactions</h3><p id="totalCount">0</p></div>
+          <div class="stat"><h3>Free Loads</h3><p id="freeLoads">0</p></div>
+        </div>
+
+        <h2>Laundry Types</h2>
+        <div class="chart">
+          <div class="bar"><span>Clothes</span><div class="bar-bg"><div id="clothesBar" class="bar-fill"></div></div></div>
+          <div class="bar"><span>Sheets</span><div class="bar-bg"><div id="sheetsBar" class="bar-fill"></div></div></div>
+          <div class="bar"><span>Comforter</span><div class="bar-bg"><div id="comforterBar" class="bar-fill"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="activityPanel" class="page owner-only">
+      <div class="box">
+      <div class="nav">
+        <button class="nav-btn" data-target="homePage">Home</button>
+        <button class="nav-btn" data-target="calculationPage">New Order</button>
+        <button class="nav-btn" data-target="transactionsPage">Records</button>
+        <button class="nav-btn owner-only" data-target="dashboardPage">OverView</button>
+          <button class="nav-btn owner-only" data-target="activityPanel">Activity Log</button>
+        </div>
+        <hr>
+        <button class="btn" id="btnClearLogs">Clear Logs</button>
+        <table>
+          <thead>
+            <tr>
+              <th>When</th>
+              <th>User</th>
+              <th>Action</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody id="activityBody"></tbody>
+        </table>  
+      </div>
+    </div>
+    <div id="printReceipt" style="display:none;"></div>
+    <script src="script.js"></script>
+
+<div id="emailModal" class="modal">
+  <div class="modal-box">
+    <span class="close" onclick="closeEmailModal()">&times;</span>
+
+    <h2>Email Receipt</h2>
+
+    <label>Email To</label>
+    <input type="email" id="emailToSend">
+
+    <label>Message</label>
+    <textarea id="emailMessage"></textarea>
+
+    <button class="btn" onclick="sendEmail()">Send</button>
+  </div>
+</div>
+  </body>
+  </html>

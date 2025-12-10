@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - IndaySystem</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="box auth-box">
+    <h1>Create Account</h1>
+
+    <label>Full Name</label>
+    <input type="text" id="regName" placeholder="Enter full name" />
+
+    <label>Email</label>
+    <input type="email" id="regEmail" placeholder="Enter email" />
+
+    <label>Password</label>
+    <input type="password" id="regPass" placeholder="Enter password" />
+
+    <label>Role</label>
+    <select id="regRole">
+      <option value="owner">Owner</option>
+      <option value="worker">Worker</option>
+    </select>
+
+    <button class="btn" onclick="registerUser()">Register</button>
+
+    <p class="auth-link">
+      Already have an account? <a href="login.html">Login</a>
+    </p>
+  </div>
+
+  <script>
+    function registerUser() {
+      const name = document.getElementById("regName").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const pass = document.getElementById("regPass").value.trim();
+      const role = document.getElementById("regRole").value;
+
+      if (!name || !email || !pass) {
+        alert("Please complete all fields.");
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+      if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
+        alert("This email is already registered.");
+        return;
+      }
+
+      const newUser = { name, email, password: pass, role };
+
+      users.push(newUser);
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Account created successfully!");
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>
